@@ -7,12 +7,8 @@ const inintalState = {
     refresh: true,
 }
 
-// if(!inintalState.refresh){
-//     window.addEventListener("beforeunload", (e) => {
-//         e.preventDefault();
-//         e.returnValue="";
-//     });
-// }
+export const change = "none";
+
 const isEqual = (obj1, obj2) => {
     const obj1keys = Object.keys(obj1);
     const obj2keys = Object.keys(obj2);
@@ -54,6 +50,14 @@ export const update_job = (details) => {
     };
 }
 
+export const save_update = (details) => {
+    return {
+        type: "SAVE",
+        payload: details,
+    };
+}
+
+
 
 const contactReducer = (state = inintalState, action) => {
     switch (action.type) {
@@ -78,42 +82,47 @@ const contactReducer = (state = inintalState, action) => {
                 ...state,
                 jobs: state.jobs.filter((job) => job.id != action.payload),
             }
-        case "UPDATE_JOB":
-            const equal = isEqual(action.payload, state.edit);
+        // case "UPDATE_JOB":
+        //     const equal = isEqual(action.payload, state.edit);
 
-            if (equal) {
-                alert("updated successfully");
-                return {
-                    ...state,
-                    jobs: state.jobs.map((job) => job.id == action.payload.id ? action.payload : job),
-                    refresh: true ,
-                }
-            }
-            else {
-                if (action.payload.file.trim() === "") {
-                    alert("fields can not be empty.");
-                    return {
-                        ...state,
-                        refresh: true,
-                    }
-                }
-                else {
-                    var r = window.confirm("You want ot save the changes!");
-                    if (r == true) {
-                        alert("updated successfully");
-                        return {
-                            ...state,
-                            jobs: state.jobs.map((job) => job.id == action.payload.id ? action.payload : job),
-                            refresh: true ,
-                        }
-                    } else {
-                        return {
-                            ...state,
-                            refresh: true ,
-                        }
-                    }
-                }
+        //     if (equal) {
+        //         return {
+        //             ...state,
+        //             jobs: state.jobs.map((job) => job.id == action.payload.id ? action.payload : job),
+        //             refresh: true,
+        //         }
+        //     }
+        //     else {
+        //         if (action.payload.file.trim() === "") {
+        //             alert("You can not leave the image field empty and it wont be saved.");
+        //             return {
+        //                 ...state,
+        //                 refresh: true,
+        //             }
+        //         }
+        //         else {
+        //             // var r = window.confirm("You want to save the changes!");
+        //             // if (r == true) {
+        //             //     alert("updated successfully");
+        //             //     return {
+        //             //         ...state,
+        //             //         jobs: state.jobs.map((job) => job.id == action.payload.id ? action.payload : job),
+        //             //         refresh: true,
+        //             //     }
+        //             // } else {
+        //             //     return {
+        //             //         ...state,
+        //             //         refresh: true,
+        //             //     }
+        //             // }
+        //         }
 
+        //     }
+        case "SAVE":
+            return {
+                ...state,
+                jobs: state.jobs.map((job) => job.id == action.payload.id ? action.payload : job),
+                refresh: true,
             }
 
         default:

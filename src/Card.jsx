@@ -1,14 +1,14 @@
-import React,{useState} from 'react';
-import {useDispatch, useSelector} from 'react-redux';
-import {editJob} from './store';
-import {remove} from './store';
+import React, { useState, useEffect } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
+import { editJob } from './store';
+import { remove } from './store';
 import Edit from './Edit';
-import {update_job} from './store';
+import { update_job } from './store';
 
-const Card = ({job}) => {
+const Card = ({ job }) => {
 
-    const edit = useSelector(state => state.edit); 
-    const dispatch = useDispatch(); 
+    const edit = useSelector(state => state.edit);
+    const dispatch = useDispatch();
     const [pop, setPop] = useState("-1000px");
 
     const edit_job = () => {
@@ -44,9 +44,11 @@ const Card = ({job}) => {
                 </div>
             </div>
 
-            <div className="edit" style={{top:`${pop}`}}> 
+            <div className="edit" style={{ top: `${pop}` }}>
                 <Edit close={close} />
             </div>
+
+            {/* <Edit /> */}
         </>
     )
 }

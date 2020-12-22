@@ -1,8 +1,8 @@
 import React, { useState, useEffect } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
-import { update_job } from './store';
+import { update_job, save_update } from './store';
 
-const Edit = ({ close }) => {
+const Edit = (props) => {
 
     const edit = useSelector(state => state.edit);
     const dispatch = useDispatch();
@@ -11,52 +11,119 @@ const Edit = ({ close }) => {
     const [location, setLocation] = useState("");
     const [des, setDes] = useState("");
     const [file, setFile] = useState("");
+    const [changed, setChange] = useState(false);
+    const [display, setDisplay] = useState("none");
 
     useEffect(() => {
+        console.log(changed);
         if (edit != null) {
             setTitle(edit.title);
             setDes(edit.des);
             setExp(edit.exp);
             setLocation(edit.location);
-            setFile(edit.file)
+            setFile(edit.file);
         }
     }, [edit])
 
-    useEffect(() => {
-        window.addEventListener("beforeunload", (e) => {
-            e.preventDefault();
-            e.returnValue="";
-        });
-    }, [])
-
     const update = (e) => {
         e.preventDefault();
-        const update_job_details = { id: edit.id, title: title, exp: exp, location: location, des: des, file: file,};
-        dispatch(update_job(update_job_details));
+        close();
+    }
+
+    const close = () => {
+        if (changed) {
+            // console.log("change");
+            // console.log(changed);
+            setDisplay("block");
+        }
+        else {
+            // const update_job_details = { id: edit.id, title: title, exp: exp, location: location, des: des, file: file, };
+            // dispatch(update_job(update_job_details));
+            setDisplay("none"); props.close();
+        }
+
+        // if (edit != null) {
+        //     setTitle(edit.title);
+        //     setDes(edit.des);
+        //     setExp(edit.exp);
+        //     setLocation(edit.location);
+        //     setFile(edit.file)
+        // }
+        setChange(false);
+
+        window.removeEventListener("beforeunload", (e) => {
+            if (changed) {
+                e.preventDefault();
+                e.returnValue = "";
+            }
+        });
+    }
+
+    const save = () => {
+        const update_job_details = { id: edit.id, title: title, exp: exp, location: location, des: des, file: file, };
+        console.log(update_job_details);
+        dispatch(save_update(update_job_details));
+        setDisplay("none"); 
         if (edit != null) {
             setTitle(edit.title);
             setDes(edit.des);
             setExp(edit.exp);
             setLocation(edit.location);
-            setFile(edit.file)
+            setFile(edit.file);
         }
-        close();
+        props.close();
+        
+    }
+
+    const dont = () => {
+        if (edit != null) {
+            setTitle(edit.title);
+            setDes(edit.des);
+            setExp(edit.exp);
+            setLocation(edit.location);
+            setFile(edit.file);
+        }
+        props.close();
     }
 
     return (
         <div className="card">
-            <h5 className="card-header">Edit Job <button onClick={close}> x </button></h5>
+            <h5 className="card-header">Edit Job <button className="btn btn-danger" onClick={close}> x </button></h5>
             <div className="card-body">
                 <form onSubmit={update}>
+                    <div className="dialogue" style={{ display: `${display}` }}>
+                        <h5>Are you sure you want to update the changes!</h5>
+                        <button className="btn btn-primary" onClick={save}>YES</button>
+                        <button className="btn btn-danger" onClick={dont}>NO</button>
+                    </div>
                     <div className="form-group ">
                         <input type="text" className="form-control"
                             value={title}
-                            onChange={(e) => setTitle(e.target.value)}
-                            placeholder="Job Title" required />
+                            onChange={(e) => {
+                                setTitle(e.target.value);
+                                setChange(true);
+                                window.addEventListener("beforeunload", (e) => {
+                                    if (changed) {
+                                        e.preventDefault();
+                                        e.returnValue = "";
+                                    }
+                                });
+                            }}
+                            placeholder="Job Title"
+                            required />
                     </div>
                     <div className="form-group">
                         <select className="form-control" value={exp}
-                            onChange={(e) => setExp(e.target.value)}>
+                            onChange={(e) => {
+                                setExp(e.target.value);
+                                setChange(true);
+                                window.addEventListener("beforeunload", (e) => {
+                                    if (changed) {
+                                        e.preventDefault();
+                                        e.returnValue = "";
+                                    }
+                                });
+                            }}>
                             <option>Experience </option>
                             <option>1 year</option>
                             <option>2 years</option>
@@ -70,14 +137,33 @@ const Edit = ({ close }) => {
                             className="form-control"
                             placeholder="Job Location"
                             value={location}
-                            onChange={(e) => setLocation(e.target.value)} required />
+                            onChange={(e) => {
+                                setLocation(e.target.value);
+                                setChange(true);
+                                window.addEventListener("beforeunload", (e) => {
+                                    if (changed) {
+                                        e.preventDefault();
+                                        e.returnValue = "";
+                                    }
+                                });
+                            }}
+                            required />
                     </div>
                     <div className="form-group">
                         <textarea className="form-control"
                             rows="3"
                             placeholder="Job Description"
                             value={des}
-                            onChange={(e) => setDes(e.target.value)}
+                            onChange={(e) => {
+                                setDes(e.target.value);
+                                setChange(true);
+                                window.addEventListener("beforeunload", (e) => {
+                                    if (changed) {
+                                        e.preventDefault();
+                                        e.returnValue = "";
+                                    }
+                                });
+                            }}
                             required></textarea>
                     </div>
                     <div className="form-group">
@@ -85,7 +171,16 @@ const Edit = ({ close }) => {
                             className="form-control"
                             placeholder="Choose file / image"
                             value={file}
-                            onChange={(e) => setFile(e.target.value)}
+                            onChange={(e) => {
+                                setFile(e.target.value);
+                                setChange(true);
+                                window.addEventListener("beforeunload", (e) => {
+                                    if (changed) {
+                                        e.preventDefault();
+                                        e.returnValue = "";
+                                    }
+                                });
+                            }}
                             required />
                     </div>
                     <div className="form-group">

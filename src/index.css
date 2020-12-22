@@ -1,3 +1,9 @@
+*{
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
 .form-group{
   margin: 10px;
 }
@@ -37,4 +43,16 @@
   background-color: #fff;
   left: 35%;
   transition: all 0.3s ease;
+  overflow: hidden;
+}
+
+.dialogue{
+  margin: 5px;
+  padding: 5px;
+  background-color: crimson;
+  color: #fff;
+}
+
+.dialogue .btn{
+  margin-right: 3px;
 }
