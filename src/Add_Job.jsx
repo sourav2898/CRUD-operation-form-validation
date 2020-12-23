@@ -48,8 +48,9 @@ const Add_Job = () => {
                         <div className="form-group">
                             <select className="form-control"
                                 value={exp}
-                                onChange={(e) => setExp(e.target.value)}>
-                                <option >Experience </option>
+                                onChange={(e) => setExp(e.target.value)}
+                                required>
+                                <option value="">Experience </option>
                                 <option>1 year</option>
                                 <option>2 years</option>
                                 <option>3 years</option>

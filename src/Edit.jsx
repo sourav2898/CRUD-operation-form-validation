@@ -13,6 +13,7 @@ const Edit = (props) => {
     const [file, setFile] = useState("");
     const [changed, setChange] = useState(false);
     const [display, setDisplay] = useState("none");
+    const [allow, setAllow] = useState("allow");
 
     useEffect(() => {
         console.log(changed);
@@ -25,21 +26,30 @@ const Edit = (props) => {
         }
     }, [edit])
 
+    const nothing = () => {
+        
+    }
+
     const update = (e) => {
         e.preventDefault();
         close();
     }
 
     const close = () => {
-        if (changed) {
+        if(title=="" || exp=="" || location=="" || des=="" || file==""){
+            alert("empty fileds! Please fill them first");
+        }
+        else if (changed) {
             // console.log("change");
             // console.log(changed);
+            setAllow("dont");
             setDisplay("block");
         }
         else {
             // const update_job_details = { id: edit.id, title: title, exp: exp, location: location, des: des, file: file, };
             // dispatch(update_job(update_job_details));
-            setDisplay("none"); props.close();
+            setDisplay("none");
+            props.close();
         }
 
         // if (edit != null) {
@@ -50,20 +60,18 @@ const Edit = (props) => {
         //     setFile(edit.file)
         // }
         setChange(false);
-
         window.removeEventListener("beforeunload", (e) => {
-            if (changed) {
-                e.preventDefault();
-                e.returnValue = "";
-            }
+            e.preventDefault();
+            e.returnValue = "";
         });
+
     }
 
     const save = () => {
         const update_job_details = { id: edit.id, title: title, exp: exp, location: location, des: des, file: file, };
         console.log(update_job_details);
         dispatch(save_update(update_job_details));
-        setDisplay("none"); 
+        setDisplay("none");
         if (edit != null) {
             setTitle(edit.title);
             setDes(edit.des);
@@ -71,8 +79,13 @@ const Edit = (props) => {
             setLocation(edit.location);
             setFile(edit.file);
         }
+        window.removeEventListener("beforeunload", (e) => {
+            e.preventDefault();
+            e.returnValue = "";
+        }); 
+        setAllow("allow");
         props.close();
-        
+
     }
 
     const dont = () => {
@@ -83,16 +96,21 @@ const Edit = (props) => {
             setLocation(edit.location);
             setFile(edit.file);
         }
+        window.removeEventListener("beforeunload", (e) => {
+            e.preventDefault();
+            e.returnValue = "";
+        });
+        setAllow("allow");
         props.close();
     }
 
     return (
         <div className="card">
-            <h5 className="card-header">Edit Job <button className="btn btn-danger" onClick={close}> x </button></h5>
+            <h5 className="card-header">Edit Job <button className="btn btn-danger" onClick={() => `${allow}`=="allow" ? close() : nothing() }> x </button></h5>
             <div className="card-body">
                 <form onSubmit={update}>
                     <div className="dialogue" style={{ display: `${display}` }}>
-                        <h5>Are you sure you want to update the changes!</h5>
+                        <h5>Update the changes!</h5>
                         <button className="btn btn-primary" onClick={save}>YES</button>
                         <button className="btn btn-danger" onClick={dont}>NO</button>
                     </div>
@@ -103,10 +121,12 @@ const Edit = (props) => {
                                 setTitle(e.target.value);
                                 setChange(true);
                                 window.addEventListener("beforeunload", (e) => {
-                                    if (changed) {
-                                        e.preventDefault();
-                                        e.returnValue = "";
-                                    }
+                                    e.preventDefault();
+                                    e.returnValue = "";
+                                });
+                                window.removeEventListener("beforeunload", (e) => {
+                                    e.preventDefault();
+                                    e.returnValue = "";
                                 });
                             }}
                             placeholder="Job Title"
@@ -118,13 +138,11 @@ const Edit = (props) => {
                                 setExp(e.target.value);
                                 setChange(true);
                                 window.addEventListener("beforeunload", (e) => {
-                                    if (changed) {
-                                        e.preventDefault();
-                                        e.returnValue = "";
-                                    }
+                                    e.preventDefault();
+                                    e.returnValue = "";
                                 });
                             }}>
-                            <option>Experience </option>
+                            <option disabled>Experience </option>
                             <option>1 year</option>
                             <option>2 years</option>
                             <option>3 years</option>
@@ -141,10 +159,8 @@ const Edit = (props) => {
                                 setLocation(e.target.value);
                                 setChange(true);
                                 window.addEventListener("beforeunload", (e) => {
-                                    if (changed) {
-                                        e.preventDefault();
-                                        e.returnValue = "";
-                                    }
+                                    e.preventDefault();
+                                    e.returnValue = "";
                                 });
                             }}
                             required />
@@ -158,10 +174,8 @@ const Edit = (props) => {
                                 setDes(e.target.value);
                                 setChange(true);
                                 window.addEventListener("beforeunload", (e) => {
-                                    if (changed) {
-                                        e.preventDefault();
-                                        e.returnValue = "";
-                                    }
+                                    e.preventDefault();
+                                    e.returnValue = "";
                                 });
                             }}
                             required></textarea>
@@ -175,16 +189,14 @@ const Edit = (props) => {
                                 setFile(e.target.value);
                                 setChange(true);
                                 window.addEventListener("beforeunload", (e) => {
-                                    if (changed) {
-                                        e.preventDefault();
-                                        e.returnValue = "";
-                                    }
+                                    e.preventDefault();
+                                    e.returnValue = "";
                                 });
                             }}
                             required />
                     </div>
                     <div className="form-group">
-                        <button className="btn btn-primary mb-2" type="submit">Update</button>
+                        <button className="btn btn-primary mb-2" type="submit">Update</button> 
                     </div>
                 </form>
 
