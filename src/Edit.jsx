@@ -37,7 +37,7 @@ const Edit = (props) => {
 
     const close = () => {
         if(title=="" || exp=="" || location=="" || des=="" || file==""){
-            alert("empty fileds! Please fill them first");
+            alert("No fileds should be empty. Please fill them first!");
         }
         else if (changed) {
             // console.log("change");
@@ -108,7 +108,13 @@ const Edit = (props) => {
         <div className="card">
             <h5 className="card-header">Edit Job <button className="btn btn-danger" onClick={() => `${allow}`=="allow" ? close() : nothing() }> x </button></h5>
             <div className="card-body">
-                <form onSubmit={update}>
+                <form onSubmit={(e) => {
+                    e.preventDefault();
+                    if(`${allow}`=="allow"){
+                        return close();
+                    }
+                    else return nothing();
+                }}>
                     <div className="dialogue" style={{ display: `${display}` }}>
                         <h5>Update the changes!</h5>
                         <button className="btn btn-primary" onClick={save}>YES</button>
