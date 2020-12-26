@@ -46,11 +46,12 @@
   overflow: hidden;
 }
 
-.dialogue{
+.dialogue, .text_empty, .image_empty{
   margin: 5px;
   padding: 5px;
   background-color: crimson;
   color: #fff;
+  transition: all 0.3s ease;
 }
 
 .dialogue .btn{

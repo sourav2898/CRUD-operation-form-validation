@@ -67,11 +67,8 @@ const contactReducer = (state = inintalState, action) => {
                 jobs: [...state.jobs, action.payload],
             }
         case "EDIT_JOB":
-            let arr = state.jobs.filter((job) => job.id == action.payload);
-            arr = arr.values();
-            for (let val of arr) {
-                arr = val;
-            }
+            let arr = state.jobs.find((job) => job.id == action.payload);
+            
             return {
                 ...state,
                 edit: arr,
@@ -118,6 +115,13 @@ const contactReducer = (state = inintalState, action) => {
         //         }
 
         //     }
+
+        case "UPDATE_JOB":
+            return{
+                ...state,
+                jobs: state.jobs.map((job) => job.id == action.payload.id ? action.payload : job),
+                refresh: true,
+            }
         case "SAVE":
             return {
                 ...state,
